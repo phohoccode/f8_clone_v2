@@ -3,7 +3,7 @@ $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // Lấy path 
 ?>
 
 <div class="flex-shrink-0">
-  <div class="sticky top-[80px] left-0 z-10 flex items-center flex-col w-24 px-2">
+  <div class="sticky top-[80px] left-0 z-1 flex items-center flex-col w-24 px-2">
     <ul class="flex flex-col gap-y-1 pl-0">
       <li>
         <a href="/f8_clone/src/views/index.php"

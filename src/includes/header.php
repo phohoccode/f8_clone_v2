@@ -21,7 +21,7 @@
   </div>
   <div class="flex items-center justify-end flex-shrink-0 ml-auto">
     <button class="border-none outline-none block text-inherit mr-6">Đăng ký</button>
-    <button
+    <button id="loginBtn"
       class="border-none outline-none block bg-gradient-to-r from-orange-500 to-red-500 flex-shrink-0 rounded-full px-5 py-2 font-semibold cursor-pointer text-gray-50">Đăng
       nhập</button>
   </div>
