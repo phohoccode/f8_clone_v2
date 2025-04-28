@@ -1,26 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+// Bao gồm tất cả các file cần thiết
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../controller/HomeController.php';
+require_once __DIR__ . '/../controller/LearningController.php'; // Bao gồm LearningController nếu chưa
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trang chủ</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+// Khởi tạo kết nối CSDL
+$database = new Database();
+$db = $database->getConnection();
 
-<body>
-  <div>
-    <?php include_once '../includes/header.php'; ?>
-    <?php include_once '../includes/login-modal.php'; ?>
+$request_uri = $_SERVER['REQUEST_URI'];
+$uri = parse_url($request_uri, PHP_URL_PATH); // Lấy phần đường dẫn
+echo "<script>console.log('$request_uri')</script>";
 
-    <div class="mt-20 flex min-h-full">
-      <?php include_once '../includes/sidebar.php'; ?>
-      <div class="flex-1 flex items-center justify-center">
-        <h1 class="text-3xl font-bold">Trang chủ</h1>
-      </div>
-    </div>
-  </div>
-</body>
-<script src="/f8_clone/src/assets/js/modal.js"></script>
 
-</html>
+// Kiểm tra yêu cầu của URL
+switch ($uri) {
+  case '/f8_clone/src/views/':
+    $homeController = new HomeController($db);
+    $homeController->index();
+    break;
+
+  case '/f8_clone/src/views/learning':
+    $learningController = new LearningController($db);
+    $learningController->index();
+    break;
+
+  default:
+    http_response_code(404);
+    echo "404 Not Found";
+    break;
+}
+
+?>

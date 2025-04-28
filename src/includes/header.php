@@ -1,9 +1,9 @@
 <div class="fixed top-0 left-0 right-0 z-20 flex items-center px-7 gap-8 h-16 border border-[#e8ebed] bg-white text-sm">
   <div class="flex items-center whitespace-nowrap">
-    <a href="/f8_clone/src/views/index.php" class="flex">
-      <img src="../assets/images/logo.webp" alt="logo" class="w-9 h-9 flex-shrink-0 object-contain rounded-lg">
+    <a href="/f8_clone/src/views/" class="flex">
+      <img src="../../public/images/logo.webp" alt="logo" class="w-9 h-9 flex-shrink-0 object-contain rounded-lg">
     </a>
-    <a href="/f8_clone/src/views/index.php" class="ml-2 font-semibold">Học lập trình để đi làm</a>
+    <a href="/f8_clone/src/views/" class="ml-2 font-semibold">Học lập trình để đi làm</a>
   </div>
   <div class="flex items-center justify-center flex-1">
     <div

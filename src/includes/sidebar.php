@@ -6,7 +6,7 @@ $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // Lấy path 
   <div class="sticky top-[80px] left-0 z-1 flex items-center flex-col w-24 px-2">
     <ul class="flex flex-col gap-y-1 pl-0">
       <li>
-        <a href="/f8_clone/src/views/index.php"
+        <a href="/f8_clone/src/views/"
           class="w-[72px] h-[72px] flex flex-col items-center justify-center rounded-2xl cursor-pointer text-black <?php echo ($current_path == '/f8_clone/src/views/index.php') ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'; ?>">
           <div class="text-2xl">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-fill"
