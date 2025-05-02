@@ -10,13 +10,17 @@ class LearningController
     $this->model = new Courses($db);
   }
 
-  public function index()
+  // Trang chi tiết khóa học
+  public function index($slug)
   {
-    // Lấy dữ liệu khóa học từ model
-    $courseList = $this->model->getAllCourses();
+    $courseDetail = $this->model->getCourseDetailBySlug($slug);
 
-    // Gửi dữ liệu đến View
-    require_once '../views/home.php';
+    if (!$courseDetail) {
+      echo "Khóa học không tồn tại!";
+      return;
+    }
+
+    require_once __DIR__ . '/../views/learning.php';
   }
 }
 ?>

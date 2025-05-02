@@ -1,8 +1,11 @@
 <?php
+
+
+
 // Bao gồm tất cả các file cần thiết
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../controller/HomeController.php';
-require_once __DIR__ . '/../controller/LearningController.php'; // Bao gồm LearningController nếu chưa
+require_once __DIR__ . '/../controller/LearningController.php'; 
 
 // Khởi tạo kết nối CSDL
 $database = new Database();
@@ -11,6 +14,7 @@ $db = $database->getConnection();
 $request_uri = $_SERVER['REQUEST_URI'];
 $uri = parse_url($request_uri, PHP_URL_PATH); // Lấy phần đường dẫn
 echo "<script>console.log('$request_uri')</script>";
+echo "<script>console.log('$uri')</script>";
 
 
 // Kiểm tra yêu cầu của URL
@@ -20,9 +24,10 @@ switch ($uri) {
     $homeController->index();
     break;
 
-  case '/f8_clone/src/views/learning':
+  case '/f8_clone/src/views/learning.php':
+    $slug = $_GET['slug'];
     $learningController = new LearningController($db);
-    $learningController->index();
+    $learningController->index($slug);
     break;
 
   default:

@@ -24,11 +24,11 @@
         <h2 class="text-2xl font-bold mb-6">Khóa học miễn phí</h2>
 
         <?php if (!empty($courseList)): ?>
-          <div class="grid lg:grid-cols-4 grid-cols-2 gap-x-6 gap-y-8">
+          <div class="grid xl:grid-cols-5 lg:grid-cols-4 grid-cols-2 gap-x-6 gap-y-8">
             <?php foreach ($courseList as $course): ?>
               <div
                 class="flex flex-col h-full rounded-2xl transition-all hover:-translate-y-1 hover:shadow-[0_4px_8px_#0000001a] overflow-hidden">
-                <a href="./learning.php?slug=<?php echo urlencode($course['slug']); ?>&id=<?php echo urlencode($course['id']); ?>"
+                <a href="./learning.php?slug=<?php echo urlencode($course['slug']);?>"
                   class="relative block w-full pt-[56.25%] object-cover">
                   <img class="absolute inset-0 w-full h-full object-cover"
                     src="<?php echo "../../public/" . $course['thumbnail_url']; ?>" alt="<?php echo $course['slug']; ?>">
@@ -70,9 +70,9 @@
 <script src="/f8_clone/src/assets/js/modal.js"></script>
 <script>
   // Chuyển dữ liệu từ PHP sang JavaScript
-  const courseList = <?php echo json_encode($courseList); ?>;
+  const courseDetail = <?php echo json_encode($courseDetail); ?>;
 
-  console.log(courseList);
+  console.log(courseDetail);
 </script>
 
 </html>
