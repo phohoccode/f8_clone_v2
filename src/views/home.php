@@ -65,7 +65,7 @@
       
   }
 
-  $sql = "SELECT id, slug, title, thumbnail_url FROM courses WHERE is_free = 1";
+  $sql = "SELECT id, slug, title, thumbnail_url FROM courses";
   $result = $conn->query($sql);
 
   $courseList = [];
