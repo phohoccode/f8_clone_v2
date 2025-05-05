@@ -67,7 +67,7 @@ $user = $result->fetch_assoc();
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Form setting -->
         <div class="w-2/3 bg-white p-6">
             <div id="tab-personal" class="tab-content">
                 <h2 class="text-xl font-semibold mb-4">Thông tin cá nhân</h2>
@@ -129,7 +129,10 @@ $user = $result->fetch_assoc();
                                 <p class="text-gray-800 font-semibold">Đổi mật khẩu của bạn</p>
                             </div>
                         </div>
-                        <button onclick="openVerifyModal()" class="text-blue-500 hover:underline">Thay đổi</button>
+                        <button onclick="toggleModal(true)"
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Thay đổi mật khẩu
+                        </button>
                     </div>
 
                     <!-- Xác minh 2 bước -->
@@ -149,118 +152,10 @@ $user = $result->fetch_assoc();
 
         </div>
     </div>
-    <!-- MODAL CẬP NHẬT HỌ VÀ TÊN -->
-    <div id="nameModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl relative">
-            <h2 class="text-xl font-semibold mb-4">Cập nhật họ và tên</h2>
-            <form method="POST" action="../includes/setting-update.php">
-                <label for="name" class="block mb-2">Họ và tên</label>
-                <input type="text" id="name" name="name" value="<?= htmlspecialchars($user['name']) ?>"
-                    class="w-full p-2 border rounded mb-4" required>
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Hủy</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Lưu lại</button>
-                </div>
-            </form>
-            <button onclick="closeModal()" class="absolute top-2 right-2 text-xl">&times;</button>
-        </div>
-    </div>
-    <!-- MODAL CẬP NHẬT ẢNH ĐẠI DIỆN -->
-    <div id="avatarModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl relative">
-            <h2 class="text-xl font-semibold mb-4">Cập nhật ảnh đại diện</h2>
-            <form method="POST" action="../includes/setting-update.php" enctype="multipart/form-data">
-                <label for="avatar" class="block mb-2">Chọn ảnh mới</label>
-                <input type="file" id="avatar" name="avatar" accept="image/*" class="w-full p-2 border rounded mb-4"
-                    required>
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeAvatarModal()"
-                        class="px-4 py-2 bg-gray-300 rounded">Hủy</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Lưu lại</button>
-                </div>
-            </form>
-            <button onclick="closeAvatarModal()" class="absolute top-2 right-2 text-xl">&times;</button>
-        </div>
-    </div>
-    <!-- Modal Cập nhật Bio -->
-    <div id="bioModal" class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md relative shadow-lg">
-            <h2 class="text-lg font-semibold mb-4">Cập nhật giới thiệu</h2>
-            <form action="../includes/setting-update.php" method="POST">
-                <textarea name="bio" rows="4" class="w-full p-2 border rounded-md mb-4"
-                    placeholder="Nhập giới thiệu mới..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeBioModal()" class="bg-gray-300 px-4 py-2 rounded">Hủy</button>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cập
-                        nhật</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
+    <?php include_once '../includes/setting-modal.php'; ?>
+   
 
-  
-    
+
 </body>
-<script>
-
-    function openModal() {
-        document.getElementById('nameModal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-        document.getElementById('nameModal').classList.add('hidden');
-    }
-    //bio
-    function openBioModal() {
-        document.getElementById('bioModal').classList.remove('hidden');
-    }
-    function closeBioModal() {
-        document.getElementById('bioModal').classList.add('hidden');
-    }
-
-    //avata
-
-    function openModal() {
-        document.getElementById('nameModal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-        document.getElementById('nameModal').classList.add('hidden');
-    }
-
-    function openAvatarModal() {
-        document.getElementById('avatarModal').classList.remove('hidden');
-    }
-
-    function closeAvatarModal() {
-        document.getElementById('avatarModal').classList.add('hidden');
-    }
-
-
-
-//bảo mật và đăng nhập
-
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    tabButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const target = btn.getAttribute("data-tab");
-
-            // Ẩn toàn bộ nội dung
-            tabContents.forEach(content => content.classList.add("hidden"));
-
-            // Bỏ active các nút
-            tabButtons.forEach(b => b.classList.remove("bg-white", "font-semibold"));
-
-            // Hiện nội dung tương ứng
-            document.getElementById(target).classList.remove("hidden");
-
-            // Đánh dấu nút đang active
-            btn.classList.add("bg-white", "font-semibold");
-        });
-    });
-</script>
-
+<script src="/f8_clone/src/assets/js/setting-modal.js"></script>
 </html>

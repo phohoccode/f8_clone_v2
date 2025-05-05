@@ -786,3 +786,15 @@ Stack trace:
 [05-May-2025 07:54:06 Europe/Berlin] Thêm người dùng mới: ID=58c4b425-8bec-498e-991e-8c12e05e84ae
 [05-May-2025 07:54:06 Europe/Berlin] Đã đóng kết nối CSDL
 [05-May-2025 07:54:06 Europe/Berlin] Session lưu thành công: ID=58c4b425-8bec-498e-991e-8c12e05e84ae, Name=Lữ Hải Đăng, Avatar URL=https://lh3.googleusercontent.com/a/ACg8ocLcmPRDSb5IJCR6ysXfq0aIX46DZnr7YRs_jCBtvGWXD9VcMvM=s96-c
+[05-May-2025 18:22:31 Europe/Berlin] Bắt đầu thực thi, Session ID: j6n8vgk7ahmi4qfnv9femekc8o
+[05-May-2025 18:22:32 Europe/Berlin] Đã cấu hình Google Client
+[05-May-2025 18:22:33 Europe/Berlin] Nhận được code từ Google
+[05-May-2025 18:22:34 Europe/Berlin] Đã gọi fetchAccessTokenWithAuthCode
+[05-May-2025 18:22:34 Europe/Berlin] Đã đặt access token
+[05-May-2025 18:22:36 Europe/Berlin] Thông tin từ Google: {"email":"22004108@st.vlute.edu.vn","familyName":"\u0110\u0103ng","gender":null,"givenName":"L\u1eef H\u1ea3i","hd":"st.vlute.edu.vn","id":"118433867062414487044","link":null,"locale":null,"name":"L\u1eef H\u1ea3i \u0110\u0103ng","picture":"https:\/\/lh3.googleusercontent.com\/a\/ACg8ocLcmPRDSb5IJCR6ysXfq0aIX46DZnr7YRs_jCBtvGWXD9VcMvM=s96-c","verifiedEmail":true}
+[05-May-2025 18:22:36 Europe/Berlin] Đã kết nối CSDL
+[05-May-2025 18:22:36 Europe/Berlin] Số hàng trả về từ SELECT: 1
+[05-May-2025 18:22:36 Europe/Berlin] Giữ nguyên avatar từ CSDL vì đã có avatar được cập nhật thủ công
+[05-May-2025 18:22:36 Europe/Berlin] Người dùng đã tồn tại: ID=58c4b425-8bec-498e-991e-8c12e05e84ae
+[05-May-2025 18:22:36 Europe/Berlin] Đã đóng kết nối CSDL
+[05-May-2025 18:22:36 Europe/Berlin] Session lưu thành công: ID=58c4b425-8bec-498e-991e-8c12e05e84ae, Name=Cá, Avatar URL=../../public/uploads/avatar_6818529754af0.gif
