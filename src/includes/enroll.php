@@ -7,11 +7,11 @@ require_once '../config/Database.php';  // đường dẫn đúng tới file c�
 //   exit;
 // }
 
-// $user_id = $_SESSION['user_id'];
-// $course_slug = $_POST['slug'] ?? '';
+$user_id = $_SESSION['user_id'];
+$course_slug = $_POST['slug'] ?? '';
 
-$user_id = "4285cd29-28fa-11f0-a320-58112284d485";  // Bạn có thể thay lại bằng session hoặc từ input
-$course_slug = $_GET['slug'] ?? '';
+// $user_id = "4285cd29-28fa-11f0-a320-58112284d485";  // Bạn có thể thay lại bằng session hoặc từ input
+// $course_slug = $_GET['slug'] ?? '';
 
 
 

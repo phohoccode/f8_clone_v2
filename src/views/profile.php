@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {
     header('Location: /f8_clone/src/views/home.php');
@@ -19,8 +20,9 @@ try {
         die("Kết nối CSDL thất bại: " . $conn->connect_error);
     }
 
+
     // Lấy thông tin người dùng
-    $stmt = $conn->prepare('SELECT name, email, avatar_url, created_at FROM users WHERE id = ?');
+    $stmt = $conn->prepare('SELECT name, email, avatar_url, created_at, bio FROM users WHERE id = ?');
     $stmt->bind_param('i', $_SESSION['user_id']); // 'i' tương ứng với kiểu int
     $stmt->execute();
     $result = $stmt->get_result();
@@ -29,6 +31,8 @@ try {
     if (!$user) {
         throw new Exception('Không tìm thấy thông tin người dùng');
     }
+
+    $_SESSION['user_bio'] = $user['bio'];
 
     // Tính thời gian tham gia
     $joinDate = new DateTime($user['created_at']);
@@ -62,12 +66,14 @@ try {
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang cá nhân</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 font-sans">
     <?php include_once '../includes/header.php'; ?>
     <?php include_once '../includes/login-modal.php'; ?>
@@ -76,8 +82,9 @@ try {
         <div class="flex gap-4">
             <!-- Thông tin người dùng -->
             <aside class="w-1/4 bg-white rounded-lg shadow-md p-4">
-                <img src="<?= htmlspecialchars($_SESSION['user_picture'] ?? '../../public/images/avt-user.png') ?>"
-                     alt="Avatar" class="w-20 h-20 rounded-full mx-auto mb-4">
+                <img src="<?= htmlspecialchars(!empty($user['avatar_url']) ? $user['avatar_url'] : '../../public/images/avt-user.png') ?>"
+                    alt="Avatar" class="w-20 h-20 rounded-full mx-auto mb-4">
+
                 <h1 class="text-xl font-bold text-gray-800 text-center">
                     <?= htmlspecialchars($_SESSION['user_name_from_db'] ?? 'Người dùng') ?>
                 </h1>
@@ -88,6 +95,10 @@ try {
                     echo htmlspecialchars('@' . strtolower(str_replace(" ", "", $username)));
                     ?>
                 </p>
+                <p class="text-sm text-gray-600 text-center italic mb-4">
+                    <?= isset($_SESSION['user_bio']) && $_SESSION['user_bio'] ? htmlspecialchars($_SESSION['user_bio']) : 'Chưa có mô tả cá nhân.' ?>
+                </p>
+
                 <p class="text-sm text-gray-600 text-center mb-2">0 nguồn theo dõi • 0 đang theo dõi</p>
                 <p class="text-sm text-gray-600 text-center">
                     Tham gia F8 từ <?= $joinDate->format('d/m/Y') ?>
@@ -116,4 +127,5 @@ try {
         </div>
     </main>
 </body>
+
 </html>

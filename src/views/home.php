@@ -81,8 +81,7 @@
   <div>
     <?php include_once '../includes/header.php'; ?>
     <?php include_once '../includes/login-modal.php'; ?>
-
-    <div class="mt-20 flex min-h-full">
+<div class="mt-20 flex min-h-full">
       <?php include_once '../includes/sidebar.php'; ?>
       <div class="flex-1 px-12">
         <h2 class="text-2xl font-bold mb-6">Khóa học miễn phí</h2>

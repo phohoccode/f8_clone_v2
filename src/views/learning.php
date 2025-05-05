@@ -1,6 +1,6 @@
 <?php
 // Bao gồm các file cần thiết
-require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/database.php';
 
 // Khởi tạo kết nối CSDL
 $database = new Database();
@@ -143,8 +143,12 @@ if ($result->num_rows === 0) {
   echo "Khóa học không tồn tại!";
   exit;
 }
-
-$user_id = "4285cd29-28fa-11f0-a320-58112284d485";  // Bạn có thể thay lại bằng session hoặc từ input
+if (isset($_SESSION)&& is_array($_SESSION)&& isset($_SESSION['user_id'])){
+  echo $_SESSION['user_id'];
+}else {
+  echo('không có id');
+}
+// $user_id = $_SESSION['user_id'];  // Bạn có thể thay lại bằng session hoặc từ input
 
 // Kiểm tra đã đăng ký hay chưa
 $is_enrolled = false;

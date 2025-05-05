@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $activation_token = bin2hex(random_bytes(32));
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $role = 'user';
-    $avatar_url = null;
+    $avatar_url = '../../public/images/avt-user.png'; // Đường dẫn ảnh mặc định
     $is_active = 0;
 
     // Lưu vào CSDL

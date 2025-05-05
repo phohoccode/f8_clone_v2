@@ -115,21 +115,35 @@ if (isset($_GET['code'])) {
 
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
+
+            // Cập nhật avatar vào CSDL
+            // Nếu avatar hiện tại trong CSDL đang rỗng, thì mới cập nhật từ Google
+            if (empty($user['avatar_url'])) {
+                $sql_update = "UPDATE users SET avatar_url = ? WHERE id = ?";
+                $stmt_update = $conn->prepare($sql_update);
+                $stmt_update->bind_param('ss', $avatar_url, $user['id']);
+                $stmt_update->execute();
+                $stmt_update->close();
+                error_log("Đã cập nhật avatar từ Google vì avatar cũ đang trống");
+            } else {
+                $avatar_url = $user['avatar_url']; // Giữ lại avatar cũ đã được người dùng cập nhật thủ công
+                error_log("Giữ nguyên avatar từ CSDL vì đã có avatar được cập nhật thủ công");
+            }
+
+            // LẤY avatar mới từ CSDL để đảm bảo đúng nhất
+            $sql_avatar = "SELECT avatar_url FROM users WHERE id = ?";
+            $stmt_avatar = $conn->prepare($sql_avatar);
+            $stmt_avatar->bind_param('s', $user['id']);
+            $stmt_avatar->execute();
+            $result_avatar = $stmt_avatar->get_result();
+            $user_avatar = $result_avatar->fetch_assoc()['avatar_url'];
+            $stmt_avatar->close();
+
+            // Lưu thông tin vào session
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
-            // Cập nhật avatar nếu người dùng đã tồn tại
-            $sql_update = "UPDATE users SET avatar_url = ? WHERE id = ?";
-            $stmt_update = $conn->prepare($sql_update);
-            if (!$stmt_update) {
-                error_log("Lỗi chuẩn bị UPDATE: " . $conn->error);
-                die("Lỗi chuẩn bị UPDATE: " . $conn->error);
-            }
-            $stmt_update->bind_param('ss', $avatar_url, $user['id']);
-            if (!$stmt_update->execute()) {
-                error_log("Lỗi thực thi UPDATE: " . $stmt_update->error);
-                die("Lỗi thực thi UPDATE: " . $stmt_update->error);
-            }
-            $stmt_update->close();
+            $_SESSION['user_picture'] = $user_avatar;
+
             echo "Người dùng đã tồn tại, đăng nhập thành công!<br>";
             error_log("Người dùng đã tồn tại: ID=" . $user['id']);
         } else {
