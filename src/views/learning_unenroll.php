@@ -69,12 +69,14 @@
     <div class="sticky top-[90px] flex flex-col gap-4 items-center">
       <div class="relative pt-[56.25%] h-0 w-full">
         <img class="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                    src="<?php echo "../../public/" . $course_json['thumbnail_url'] ?? null; ?>"
-          alt="<?php echo $course_json['slug'] ?? ""; ?>">
+          src="<?php echo "../../public/" . ($course_json['thumbnail_url'] ?? 'default.jpg'); ?>"
+          alt="<?php echo htmlspecialchars($course_json['slug'] ?? ""); ?>">
+
       </div>
-        <h3 class="text-xl text-[#f05123]">Miễn phí</h3>
-       <a href="../includes/enroll.php?slug=<?php echo urlencode($course_json['slug']); ?>"
-        class="min-w-[180px]  rounded-full flex items-center justify-center bg-[#0093fc] text-white text-lg px-4 py-2">Đăng ký
+      <h3 class="text-xl text-[#f05123]">Miễn phí</h3>
+      <a href="../includes/enroll.php?slug=<?php echo urlencode($course_json['slug'] ?? ""); ?>"
+        class="min-w-[180px] rounded-full flex items-center justify-center bg-[#0093fc] text-white text-lg px-4 py-2">Đăng
+        ký
         học</a>
 
     </div>

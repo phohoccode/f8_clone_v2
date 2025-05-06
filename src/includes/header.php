@@ -40,18 +40,23 @@ if (isset($_SESSION['user_id'])) {
     <a href="/f8_clone/src/views/" class="ml-2 font-semibold">Học lập trình để đi làm</a>
   </div>
   <div class="flex items-center justify-center flex-1">
-    <div
-      class="flex items-center transition-all focus-within:border-black justify-center w-[420px] max-w-full h-10 px-4 py-2 rounded-full border-2 border-[#e8e8e8]">
-      <div class="text-xl">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-          viewBox="0 0 16 16">
-          <path
-            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
+    <form method="get" action="../views/search.php">
+      <div
+        class="flex items-center transition-all focus-within:border-black justify-center w-[420px] max-w-full h-10 px-4 py-2 rounded-full border-2 border-[#e8e8e8]">
+        <div class="text-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+          </svg>
+        </div>
+
+        <input name="search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+          type="text" class="flex-1 w-full h-full outline-none border-none px-1 caret-black"
+          placeholder="Tìm kiếm khóa học, bài viết...">
+
       </div>
-      <input type="text" class="flex-1 w-full h-full outline-none border-none px-1 caret-black"
-        placeholder="Tìm kiếm khóa học, bài viết...">
-    </div>
+    </form>
   </div>
   <div class="flex items-center justify-end flex-shrink-0 ml-auto">
     <?php if (isset($_SESSION['user_id'])): ?>

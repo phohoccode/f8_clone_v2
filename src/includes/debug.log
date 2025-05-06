@@ -798,3 +798,27 @@ Stack trace:
 [05-May-2025 18:22:36 Europe/Berlin] Người dùng đã tồn tại: ID=58c4b425-8bec-498e-991e-8c12e05e84ae
 [05-May-2025 18:22:36 Europe/Berlin] Đã đóng kết nối CSDL
 [05-May-2025 18:22:36 Europe/Berlin] Session lưu thành công: ID=58c4b425-8bec-498e-991e-8c12e05e84ae, Name=Cá, Avatar URL=../../public/uploads/avatar_6818529754af0.gif
+[06-May-2025 15:24:50 Europe/Berlin] Bắt đầu thực thi, Session ID: mc51k928km7k0gmqcp7gnknhfj
+[06-May-2025 15:24:50 Europe/Berlin] Đã cấu hình Google Client
+[06-May-2025 15:24:51 Europe/Berlin] Nhận được code từ Google
+[06-May-2025 15:24:52 Europe/Berlin] Đã gọi fetchAccessTokenWithAuthCode
+[06-May-2025 15:24:52 Europe/Berlin] Đã đặt access token
+[06-May-2025 15:24:53 Europe/Berlin] Thông tin từ Google: {"email":"qviet092@gmail.com","familyName":"Vi\u1ec7t","gender":null,"givenName":"Qu\u1ed1c","hd":null,"id":"100262585846211881737","link":null,"locale":null,"name":"Qu\u1ed1c Vi\u1ec7t","picture":"https:\/\/lh3.googleusercontent.com\/a\/ACg8ocI7wNOr5fFec2l1EK8jf4sBEJ0jlmh2mygJ-8dh-1u670Odp1B3=s96-c","verifiedEmail":true}
+[06-May-2025 15:24:53 Europe/Berlin] Đã kết nối CSDL
+[06-May-2025 15:24:53 Europe/Berlin] Số hàng trả về từ SELECT: 1
+[06-May-2025 15:24:53 Europe/Berlin] Giữ nguyên avatar từ CSDL vì đã có avatar được cập nhật thủ công
+[06-May-2025 15:24:53 Europe/Berlin] Người dùng đã tồn tại: ID=4285cd29-28fa-11f0-a320-58112284d485
+[06-May-2025 15:24:53 Europe/Berlin] Đã đóng kết nối CSDL
+[06-May-2025 15:24:53 Europe/Berlin] Session lưu thành công: ID=4285cd29-28fa-11f0-a320-58112284d485, Name=admin, Avatar URL=https://lh3.googleusercontent.com/a/ACg8ocI7wNOr5fFec2l1EK8jf4sBEJ0jlmh2mygJ-8dh-1u670Odp1B3=s96-c
+[06-May-2025 15:25:14 Europe/Berlin] Bắt đầu thực thi, Session ID: mc51k928km7k0gmqcp7gnknhfj
+[06-May-2025 15:25:14 Europe/Berlin] Đã cấu hình Google Client
+[06-May-2025 15:25:14 Europe/Berlin] Nhận được code từ Google
+[06-May-2025 15:25:14 Europe/Berlin] Đã gọi fetchAccessTokenWithAuthCode
+[06-May-2025 15:25:14 Europe/Berlin] Đã đặt access token
+[06-May-2025 15:25:14 Europe/Berlin] Thông tin từ Google: {"email":"qviet092@gmail.com","familyName":"Vi\u1ec7t","gender":null,"givenName":"Qu\u1ed1c","hd":null,"id":"100262585846211881737","link":null,"locale":null,"name":"Qu\u1ed1c Vi\u1ec7t","picture":"https:\/\/lh3.googleusercontent.com\/a\/ACg8ocI7wNOr5fFec2l1EK8jf4sBEJ0jlmh2mygJ-8dh-1u670Odp1B3=s96-c","verifiedEmail":true}
+[06-May-2025 15:25:14 Europe/Berlin] Đã kết nối CSDL
+[06-May-2025 15:25:14 Europe/Berlin] Số hàng trả về từ SELECT: 1
+[06-May-2025 15:25:14 Europe/Berlin] Giữ nguyên avatar từ CSDL vì đã có avatar được cập nhật thủ công
+[06-May-2025 15:25:15 Europe/Berlin] Người dùng đã tồn tại: ID=4285cd29-28fa-11f0-a320-58112284d485
+[06-May-2025 15:25:15 Europe/Berlin] Đã đóng kết nối CSDL
+[06-May-2025 15:25:15 Europe/Berlin] Session lưu thành công: ID=4285cd29-28fa-11f0-a320-58112284d485, Name=admin, Avatar URL=https://lh3.googleusercontent.com/a/ACg8ocI7wNOr5fFec2l1EK8jf4sBEJ0jlmh2mygJ-8dh-1u670Odp1B3=s96-c
