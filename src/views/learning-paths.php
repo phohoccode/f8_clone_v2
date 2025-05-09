@@ -6,12 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trang chủ</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .frontend {
-      border: 1x;
-      border-radius: 10px;
-    }
-  </style>
+  <link rel="shortcut icon" href="../../public/images/logo.webp" type="image/x-icon">
+
 </head>
 
 <body>
@@ -38,11 +34,12 @@
                   Lập trình viên Front-end là người xây dựng ra giao diện websites. Trong phần này F8 sẽ chia sẻ cho bạn
                   lộ trình để trở thành lập trình viên Front-end nhé.
                 </p>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <a href="frontend-path.php"
+                  class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                   XEM CHI TIẾT
-                </button>
+                </a>
               </div>
-              <img src="../../public/images/thu.png" alt="Front-end" class="w-24 h-24 ml-6 mt-4 md:mt-0">
+              <img src="/f8_clone/public/images/learning-path/frontend.png" alt="Front-end" class="w-24 h-24 ml-6 mt-4 md:mt-0">
             </div>
 
             <!-- Back-end Card -->
@@ -53,11 +50,11 @@
                   Trái với Front-end thì lập trình viên Back-end là người làm việc với dữ liệu, công việc thường nặng
                   tính logic hơn. Chúng ta sẽ cùng tìm hiểu thêm về lộ trình học Back-end nhé.
                 </p>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <a href="backend-path.php" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                   XEM CHI TIẾT
-                </button>
+                </a>
               </div>
-              <img src="../../public/images/hoc backend.png" alt="Back-end" class="w-24 h-24 ml-6 mt-4 md:mt-0">
+              <img src="/f8_clone/public/images/learning-path/frontend.png" alt="Back-end" class="w-24 h-24 ml-6 mt-4 md:mt-0">
 
             </div>
           </div>
@@ -79,7 +76,7 @@
 
             <!-- Image -->
             <div class="flex justify-center">
-              <img src="../../public/images/bala.webp" alt="Community Illustration"
+              <img src="/f8_clone/public/images/learning-path/group-card.webp" alt="Community Illustration"
                 class="max-w-full md:max-w-md p-5 flex items-center justify-between mt-12 ">
             </div>
           </div>

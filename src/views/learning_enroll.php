@@ -8,7 +8,7 @@
       <img src="../../public/images/logo.webp" alt="logo" class="w-8 h-8 flex-shrink-0 object-contain rounded-lg">
     </a>
     <span class="text-white text-sm ml-4 font-semibold inline-block">
-      <?= htmlspecialchars($course_json['name'] ?? 'Tên khóa học') ?>
+      <?= htmlspecialchars($course_json['title'] ?? 'Tên khóa học') ?>
     </span>
   </div>
 
@@ -69,7 +69,7 @@
                             <?= ($lessonIndex + 1) . '. ' . htmlspecialchars($lesson['title'] ?? '') ?>
                           </h3>
                           <p class="mt-1 text-xs">
-                            <?= htmlspecialchars($lesson['duration'] ?? '') ?>
+                            <?= htmlspecialchars($lesson['duration'] ?? '') ?> phút
                           </p>
                         </a>
                       </li>

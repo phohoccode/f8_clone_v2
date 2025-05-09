@@ -11,10 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const registerEmail = document.getElementById('registerEmail');
   const registerPassword = document.getElementById('registerPassword');
   const confirmPassword = document.getElementById('confirmPassword');
-
-  // // Log elements to debug
-  // console.log('loginBtn:', loginBtn);
-  // console.log('closeLoginModalBtn:', closeLoginModalBtn);
+  
 
   if (loginBtn) {
     loginBtn.addEventListener('click', function () {

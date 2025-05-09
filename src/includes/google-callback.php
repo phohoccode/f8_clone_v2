@@ -130,7 +130,7 @@ if (isset($_GET['code'])) {
                 error_log("Giữ nguyên avatar từ CSDL vì đã có avatar được cập nhật thủ công");
             }
 
-            // LẤY avatar mới từ CSDL để đảm bảo đúng nhất
+            // LẤY avatar mới từ CSDL để 
             $sql_avatar = "SELECT avatar_url FROM users WHERE id = ?";
             $stmt_avatar = $conn->prepare($sql_avatar);
             $stmt_avatar->bind_param('s', $user['id']);
@@ -180,7 +180,7 @@ if (isset($_GET['code'])) {
         if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])) {
             echo "Session lưu thành công: ID={$_SESSION['user_id']}, Name={$_SESSION['user_name']}, Avatar URL={$_SESSION['user_picture']}<br>";
             error_log("Session lưu thành công: ID={$_SESSION['user_id']}, Name={$_SESSION['user_name']}, Avatar URL={$_SESSION['user_picture']}");
-            header('Location: ../views/home.php');
+            header('Location: ../views/index.php');
             exit();
         } else {
             error_log("Lỗi lưu session: " . json_encode($_SESSION));

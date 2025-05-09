@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
 
-        echo "<script>alert('Đăng nhập thành công!'); window.location.href = 'home.php';</script>";
+        echo "<script>alert('Đăng nhập thành công!'); window.location.href = 'index.php';</script>";
         exit();
     } else {
         echo "<script>alert('Email không tồn tại!'); window.history.back();</script>";

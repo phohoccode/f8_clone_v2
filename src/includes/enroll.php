@@ -1,21 +1,20 @@
 <?php
 session_start();
-require_once '../config/Database.php';  // đường dẫn đúng tới file của bạn
+require_once '../config/Database.php';
 
-// if (!isset($_SESSION['user_id'])) {
-//   header("Location: ../views/login.php");
-//   exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+  echo "<script>
+            alert('Vui lòng đăng nhập để thực hiện hành động này.');
+            window.location.href = '../views/index.php';
+          </script>";
+  exit;
+}
 
 $user_id = $_SESSION['user_id'];
-$course_slug = $_POST['slug'] ?? '';
-
-// $user_id = "4285cd29-28fa-11f0-a320-58112284d485";  // Bạn có thể thay lại bằng session hoặc từ input
-// $course_slug = $_GET['slug'] ?? '';
-
-
+$course_slug = $_GET['slug'] ?? '';
 
 if ($course_slug) {
+
   $db = new Database();
   $conn = $db->getConnection();
 

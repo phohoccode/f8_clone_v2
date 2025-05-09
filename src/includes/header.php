@@ -2,8 +2,6 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
-
-
 if (isset($_SESSION['user_id'])) {
   $conn = new mysqli('localhost', 'root', '', 'f8_clone');
   $conn->set_charset('utf8mb4');
@@ -13,7 +11,7 @@ if (isset($_SESSION['user_id'])) {
   }
 
   $userId = $_SESSION['user_id'];
-  $sql = "SELECT name, email, avatar_url FROM users WHERE id = ?";
+  $sql = "SELECT * FROM users WHERE id = ?";
   $stmt = $conn->prepare($sql);
   $stmt->bind_param('s', $userId);
   $stmt->execute();
@@ -24,6 +22,7 @@ if (isset($_SESSION['user_id'])) {
     $_SESSION['user_name_from_db'] = $user['name'];
     $_SESSION['user_email_from_db'] = $user['email'];
     $_SESSION['user_avatar_url'] = $user['avatar_url'];
+    $_SESSION['user_role'] = $user['role'];
   }
 
   $stmt->close();
@@ -40,7 +39,7 @@ if (isset($_SESSION['user_id'])) {
     <a href="/f8_clone/src/views/" class="ml-2 font-semibold">Học lập trình để đi làm</a>
   </div>
   <div class="flex items-center justify-center flex-1">
-    <form method="get" action="../views/search.php">
+    <form method="get" action="../views/search.php" class="m-0">
       <div
         class="flex items-center transition-all focus-within:border-black justify-center w-[420px] max-w-full h-10 px-4 py-2 rounded-full border-2 border-[#e8e8e8]">
         <div class="text-xl">
@@ -61,19 +60,19 @@ if (isset($_SESSION['user_id'])) {
   <div class="flex items-center justify-end flex-shrink-0 ml-auto">
     <?php if (isset($_SESSION['user_id'])): ?>
       <!-- Hiển thị khi đã đăng nhập -->
-      <a href="#" class="text-gray-600 hover:text-gray-800 mr-6">Khóa học của tui</a>
-      <i class="fa-solid fa-bell text-gray-600 cursor-pointer mr-4"></i>
-      <img id="user-avatar" src="<?php
-      echo htmlspecialchars(
-        !empty($_SESSION['user_avatar_url']) ?
-        $_SESSION['user_avatar_url'] :
-        ($_SESSION['user_picture'] ?? '../../public/images/avt-user.png')
-      );
-      ?>" alt="Avatar" class="w-10 h-10 rounded-full cursor-pointer">
+      <a href="/f8_clone/src/views/profile.php" class="text-gray-600 hover:text-gray-800 mr-6">Khóa học của tui</a>
+      <div class="relative">
+        <img id="user-avatar" src="<?php
+        echo htmlspecialchars(
+          !empty($_SESSION['user_avatar_url']) ?
+          $_SESSION['user_avatar_url'] :
+          ($_SESSION['user_picture'] ?? '../../public/images/avt-user.png')
+        );
+        ?>" alt="Avatar" class="w-10 h-10 rounded-full cursor-pointer">
+      </div class="relative">
 
     <?php else: ?>
       <!-- Hiển thị khi chưa đăng nhập -->
-      <button class="border-none outline-none block text-inherit mr-6">Đăng ký</button>
       <button id="loginBtn"
         class="border-none outline-none block bg-gradient-to-r from-orange-500 to-red-500 flex-shrink-0 rounded-full px-5 py-2 font-semibold cursor-pointer text-gray-50">Đăng
         nhập</button>
@@ -83,7 +82,7 @@ if (isset($_SESSION['user_id'])) {
 
 
 <?php if (isset($_SESSION['user_id'])): ?>
-  <div id="user-modal" class="absolute top-16 right-4 bg-white rounded-lg shadow-lg w-60 hidden z-50">
+  <div id="user-modal" class="fixed top-16 right-4 bg-white rounded-lg shadow-lg w-60 hidden z-50">
     <div class="p-4">
       <div class="flex items-center gap-4 mb-4">
         <img id="user-avatar" src="<?php
@@ -108,10 +107,12 @@ if (isset($_SESSION['user_id'])) {
       <ul class="text-sm text-gray-700">
         <li class="py-2 px-3 hover:bg-gray-100 rounded"><a href="../views/profile.php" class="block">Trang cá nhân</a>
         </li>
-        <li class="py-2 px-3 hover:bg-gray-100 rounded"><a href="#" class="block">Viết blog</a></li>
-        <li class="py-2 px-3 hover:bg-gray-100 rounded"><a href="#" class="block">Bài viết của tôi</a></li>
-        <li class="py-2 px-3 hover:bg-gray-100 rounded"><a href="#" class="block">Bài viết đã lưu</a></li>
         <li class="py-2 px-3 hover:bg-gray-100 rounded"><a href="../views/setting.php" class="block">Cài đặt</a></li>
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+          <li class="py-2 px-3 hover:bg-gray-100 rounded">
+            <a href="../views/dashboard/index.php" class="block">Bảng điều khiển</a>
+          </li>
+        <?php endif; ?>
         <li class="py-2 px-3 hover:bg-gray-100 rounded mt-2 border-t border-gray-200"><a href="?logout=true"
             class="block text-red-600">Đăng xuất</a></li>
       </ul>
@@ -125,6 +126,7 @@ if (isset($_SESSION['user_id'])) {
     userAvatar.addEventListener('click', (e) => {
       e.stopPropagation();
       userModal.classList.toggle('hidden');
+      // document.body.classList.toggle('overflow-hidden');
     });
 
     // Đóng modal khi nhấn ra ngoài

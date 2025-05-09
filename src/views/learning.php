@@ -1,164 +1,151 @@
 <?php
-// Bao gồm các file cần thiết
+// Nạp file cấu hình kết nối cơ sở dữ liệu
 require_once __DIR__ . '/../config/database.php';
 
-// Khởi tạo kết nối CSDL
+// Khởi động phiên làm việc (session) để sử dụng thông tin người dùng đã đăng nhập
+session_start();
+
+// Khởi tạo kết nối đến CSDL
 $database = new Database();
 $db = $database->getConnection();
+
+// Lấy ID người dùng từ session nếu đã đăng nhập
 $user_id = $_SESSION['user_id'] ?? null;
+
+// Lấy slug khóa học từ tham số GET (ví dụ: ?slug=lap-trinh-php)
 $slug = $_GET['slug'] ?? '';
 
-// Cải tiến truy vấn SQL với ORDER BY trong GROUP_CONCAT
-$sql = "SELECT
-            JSON_OBJECT(
-              'name', c.title,
-              'slug', c.slug,
-              'id', c.id,
-              'thumbnail_url', c.thumbnail_url,
-              'chapters', CONCAT('[', GROUP_CONCAT(
-                JSON_OBJECT(
-                  'id', ch.id,
-                  'title', ch.title,
-                  'order', ch.`order`,
-                  'lessons', IFNULL((
-                    SELECT CONCAT('[', GROUP_CONCAT(
-                      JSON_OBJECT(
-                        'id', l.id,
-                        'title', l.title,
-                        'video_url', l.video_url,
-                        'duration', l.duration,
-                        'order', l.`order`
-                      ) ORDER BY l.`order` ASC
-                    ), ']')
-                    FROM lessons l
-                    WHERE l.chapter_id = ch.id
-                    HAVING COUNT(*) > 0
-                  ), 'null')
-                ) ORDER BY ch.`order` ASC
-              ), ']')
-            ) AS course_json
-          FROM courses c
-          JOIN chapters ch ON ch.course_id = c.id
-          WHERE c.slug = ?
-          GROUP BY c.id, c.title, c.slug";
-
-// Đảm bảo slug tồn tại trước khi sử dụng
+// Nếu không có slug thì chuyển hướng về trang chính
 if (empty($slug)) {
   header('Location: /f8_clone/src/views/');
   exit;
 }
 
-$stmt = $db->prepare($sql);
-$stmt->bind_param('s', $slug);
+// Truy vấn SQL để lấy toàn bộ thông tin khóa học
+$course_query = "SELECT id, title, slug, objectives, description, price, thumbnail_url 
+                FROM courses 
+                WHERE slug = ?";
+
+// Chuẩn bị và thực thi truy vấn SQL
+$stmt = $db->prepare($course_query);
+$stmt->bind_param('s', $slug); // Gắn tham số slug vào truy vấn SQL
 $stmt->execute();
-$result = $stmt->get_result()->fetch_assoc();
+$course_result = $stmt->get_result()->fetch_assoc(); // Lấy kết quả từ cơ sở dữ liệu dưới dạng mảng
 
-$course_json = null;
-$chapters = [];
-$currentData = null;
-$lessonId = $_GET['id'] ?? null;
-
-if ($result && isset($result['course_json'])) {
-  $course_json = json_decode($result['course_json'], true);
-
-  // Xử lý dữ liệu chapters
-  if (isset($course_json['chapters']) && is_string($course_json['chapters'])) {
-    $course_json['chapters'] = json_decode($course_json['chapters'], true);
-  }
-
-  // Đảm bảo chapters là mảng hợp lệ
-  if (isset($course_json['chapters']) && is_array($course_json['chapters'])) {
-    $chapters = $course_json['chapters'];
-
-    // Xử lý dữ liệu lessons cho mỗi chapter
-    foreach ($chapters as &$chapter) {
-      if (isset($chapter['lessons']) && $chapter['lessons'] !== null) {
-        if (is_string($chapter['lessons'])) {
-          $chapter['lessons'] = json_decode($chapter['lessons'], true);
-        }
-
-        // Đảm bảo lessons là mảng hợp lệ
-        if (!is_array($chapter['lessons'])) {
-          $chapter['lessons'] = [];
-        }
-      } else {
-        $chapter['lessons'] = [];
-      }
-    }
-
-    // Nếu không có lesson ID được chỉ định, tìm bài học đầu tiên
-    if (empty($lessonId)) {
-      foreach ($chapters as $chapter) {
-        if (!empty($chapter['lessons'])) {
-          $firstLesson = $chapter['lessons'][0];
-          $lessonId = $firstLesson['id'];
-          $currentData = [
-            'lesson' => $firstLesson,
-            'chapter_title' => $chapter['title'],
-            'course_name' => $course_json['name']
-          ];
-          break;
-        }
-      }
-    } else {
-      // Tìm bài học theo ID
-      foreach ($chapters as $chapter) {
-        if (empty($chapter['lessons']))
-          continue;
-
-        foreach ($chapter['lessons'] as $lesson) {
-          if (isset($lesson['id']) && $lesson['id'] == $lessonId) {
-            $currentData = [
-              'lesson' => $lesson,
-              'chapter_title' => $chapter['title'],
-              'course_name' => $course_json['name']
-            ];
-            break 2;
-          }
-        }
-      }
-    }
-  }
-}
-
-echo "<script>console.log(" . json_encode($course_json) . ");</script>";
-
-
-// Tính tổng số bài học
-$totalLessons = 0;
-if (is_array($chapters)) {
-  foreach ($chapters as $chapter) {
-    $totalLessons += count($chapter['lessons'] ?? []);
-  }
-}
-
-
-// Lấy thông tin khóa học
-$course_stmt = $db->prepare("SELECT * FROM courses WHERE slug = ?");
-$course_stmt->bind_param("s", $slug);
-$course_stmt->execute();
-$result = $course_stmt->get_result();
-
-if ($result->num_rows === 0) {
+// Kiểm tra khóa học có tồn tại không
+if (!$course_result) {
   echo "Khóa học không tồn tại!";
   exit;
 }
-if (isset($_SESSION)&& is_array($_SESSION)&& isset($_SESSION['user_id'])){
-  echo $_SESSION['user_id'];
-}else {
-  echo('không có id');
-}
-// $user_id = $_SESSION['user_id'];  // Bạn có thể thay lại bằng session hoặc từ input
 
-// Kiểm tra đã đăng ký hay chưa
+$course_id = $course_result['id']; // Lấy ID khóa học từ kết quả truy vấn
+$course_json = $course_result; // Lưu thông tin khóa học vào biến
+$course_json['objectives'] = json_decode($course_result['objectives'], true) ?? null; // Giải mã mục tiêu khóa học (nếu có)
+
+// Truy vấn lấy các chương của khóa học
+$chapter_query = "SELECT id, title, `order` 
+                 FROM chapters 
+                 WHERE course_id = ? 
+                 ORDER BY `order` ASC";
+
+// Chuẩn bị và thực thi truy vấn SQL để lấy các chương của khóa học
+$chapter_stmt = $db->prepare($chapter_query);
+$chapter_stmt->bind_param('s', $course_id); // Gắn tham số course_id vào truy vấn SQL
+$chapter_stmt->execute();
+$chapter_result = $chapter_stmt->get_result(); // Lấy kết quả từ cơ sở dữ liệu dưới dạng mảng
+
+$chapters = []; // Mảng lưu các chương của khóa học
+
+while ($chapter = $chapter_result->fetch_assoc()) {
+
+  // Truy vấn lấy bài học cho từng chương
+  $lessons = []; // Mảng lưu các bài học của chương
+
+  $lesson_query = "SELECT id, title, video_url, duration, `order`
+                  FROM lessons
+                  WHERE chapter_id = ?  
+                  ORDER BY `order` ASC";
+
+  // Chuẩn bị và thực thi truy vấn SQL để lấy các bài học của chương
+  $lesson_stmt = $db->prepare($lesson_query);
+  $lesson_stmt->bind_param('s', $chapter['id']); // Gắn tham số chapter_id vào truy vấn SQL
+  $lesson_stmt->execute();
+  $lesson_result = $lesson_stmt->get_result(); // Lấy kết quả từ cơ sở dữ liệu dưới dạng mảng
+
+  while ($lesson = $lesson_result->fetch_assoc()) {
+    $lessons[] = $lesson;
+  }
+
+  $chapter['lessons'] = $lessons;
+  $chapters[] = $chapter;
+
+  $lesson_stmt->close();
+}
+
+// Lưu thông tin các chương vào thông tin khóa học
+$course_json['chapters'] = $chapters;
+
+// Kiểm tra khóa học có tồn tại không
+if (!$course_json) {
+  echo "Khóa học không tồn tại!";
+  exit;
+}
+
+// Tính tổng số bài học trong khóa
+$totalLessons = 0;
+foreach ($chapters as $chapter) {
+  $totalLessons += count($chapter['lessons'] ?? []); // Cộng dồn số bài học của mỗi chương
+}
+
+// Lấy ID bài học nếu được chỉ định
+$lessonId = $_GET['id'] ?? null;
+$currentData = null;
+
+// Nếu chưa có bài học nào được chọn, chọn bài đầu tiên trong chương đầu tiên
+if (empty($lessonId)) {
+  foreach ($chapters as $chapter) {
+    if (!empty($chapter['lessons'])) {
+      $firstLesson = $chapter['lessons'][0]; // Lấy bài học đầu tiên của chương đầu tiên
+      $lessonId = $firstLesson['id']; // Cập nhật ID bài học
+      $currentData = [
+        'lesson' => $firstLesson,
+        'chapter_title' => $chapter['title'],
+        'course_name' => $course_json['title']
+      ];
+      break; // Dừng vòng lặp khi đã chọn bài học đầu tiên
+    }
+  }
+} else {
+  // Nếu có bài học được chỉ định, tìm và lấy thông tin
+  foreach ($chapters as $chapter) {
+    if (empty($chapter['lessons']))
+      continue;
+
+    foreach ($chapter['lessons'] as $lesson) {
+      if (isset($lesson['id']) && $lesson['id'] == $lessonId) {
+        $currentData = [
+          'lesson' => $lesson,
+          'chapter_title' => $chapter['title'],
+          'course_name' => $course_json['title']
+        ];
+        break 2; // Thoát khỏi cả hai vòng lặp khi tìm thấy bài học
+      }
+    }
+  }
+}
+
+// Kiểm tra người dùng đã đăng ký khóa học chưa
 $is_enrolled = false;
 if ($user_id) {
+  // Truy vấn kiểm tra người dùng đã đăng ký khóa học hay chưa
   $enroll_stmt = $db->prepare("SELECT 1 FROM enrollments WHERE user_id = ? AND course_id = ?");
-  $enroll_stmt->bind_param("ii", $user_id, $course_json['id']);
+  $enroll_stmt->bind_param("ss", $user_id, $course_id); // Gắn tham số user_id và course_id vào truy vấn
   $enroll_stmt->execute();
-  $is_enrolled = $enroll_stmt->get_result()->num_rows > 0;
+  $is_enrolled = $enroll_stmt->get_result()->num_rows > 0; // Nếu có kết quả trả về thì người dùng đã đăng ký
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -172,6 +159,8 @@ if ($user_id) {
 </head>
 
 <body>
+  <?php include_once '../includes/login-modal.php'; ?>
+
   <?php if (!$is_enrolled): ?>
     <!-- Hiển thị sidebar và header khi chưa đăng ký -->
     <div class="mt-20 flex min-h-full">
@@ -189,7 +178,9 @@ if ($user_id) {
       </div>
     </div>
   <?php endif; ?>
-</body>
 
+  <?php include_once '../includes/footer.php'; ?>
+</body>
+<script src="/f8_clone/src/assets/js/modal.js"></script>
 
 </html>

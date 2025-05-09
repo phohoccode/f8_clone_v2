@@ -20,7 +20,7 @@
   // Xử lý đăng xuất
   if (isset($_GET['logout'])) {
     session_destroy();
-    header('Location: /f8_clone/src/views/home.php');
+    header('Location: /f8_clone/src/views/index.php');
     exit();
   }
 
