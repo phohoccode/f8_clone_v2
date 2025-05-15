@@ -70,6 +70,90 @@ include_once '../includes/get-courses.php';
   <?php include_once '../includes/footer.php'; ?>
 </body>
 <script src="/f8_clone/src/assets/js/modal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<?php
+$action = $_GET['action'] ?? '';
+$success = $_GET['success'] ?? '';
+$error = $_GET['error'] ?? '';
+$error_type = $_GET['error_type'] ?? 'default';  // thêm khai báo error_type với default
+$succes_type = $_GET['succes_type'] ?? 'default';
+
+$messages = [
+  'login' => [
+    'success' => [
+      'default' => [
+        'icon' => 'success',
+        'title' => 'Đăng nhập thành công!',
+        'text' => 'Chào mừng bạn quay trở lại.'
+      ]
+    ],
+    'error' => [
+      'incorrect-password' => [
+        'icon' => 'error',
+        'title' => 'Sai mật khẩu!',
+        'text' => 'Vui lòng kiểm tra lại.'
+      ],
+      'not-strong-pwd' => [
+        'icon' => 'error',
+        'title' => 'Mật khẩu không hợp lệ!',
+        'text' => 'Tài khoản chưa kích hoạt. Vui lòng kiểm tra email.'
+      ],
+      'default' => [
+        'icon' => 'error',
+        'title' => 'Lỗi đăng nhập!',
+        'text' => 'Đã xảy ra lỗi khi đăng nhập hoặc Email không tồn tại. Vui lòng thử lại.'
+      ]
+    ]
+  ]
+
+];
+
+
+if (isset($messages[$action])) {
+  if ($success === '1') {
+    $msg = $messages[$action]['success'];
+    if (is_array($messages[$action]['success'])) {
+      // Lấy lỗi theo error_type, nếu không tồn tại thì lấy default
+      $msg = $messages[$action]['success'][$error_type] ?? $messages[$action]['success']['default'];
+    } else {
+      // Nếu chỉ là 1 lỗi chung (không phải mảng)
+      $msg = $messages[$action]['success'];
+    }
+  } elseif ($error === '1') {
+    // Kiểm tra xem error có phải là mảng (nhiều loại) hay không
+    if (is_array($messages[$action]['error'])) {
+      // Lấy lỗi theo error_type, nếu không tồn tại thì lấy default
+      $msg = $messages[$action]['error'][$error_type] ?? $messages[$action]['error']['default'];
+    } else {
+      // Nếu chỉ là 1 lỗi chung (không phải mảng)
+      $msg = $messages[$action]['error'];
+    }
+  }
+
+  if (isset($msg)) {
+    echo "<script>
+      Swal.fire({
+        icon: '{$msg['icon']}',
+        title: '{$msg['title']}',
+        text: '{$msg['text']}',
+        timer: 2000,
+        showConfirmButton: true
+      });
+    </script>";
+  }
+}
+?>
+<!-- Xóa các query sau khi hiển thị alert -->
+<script>
+  if (window.history.replaceState) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('success');
+    url.searchParams.delete('error');
+    url.searchParams.delete('action');
+    url.searchParams.delete('error_type');  // xóa luôn error_type cho sạch
+    window.history.replaceState({}, document.title, url.pathname);
+  }
+</script>
 <script>
   const courseList = <?php echo json_encode($courseList); ?>;
   console.log(courseList);

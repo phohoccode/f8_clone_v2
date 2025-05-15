@@ -16,27 +16,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Nếu tìm thấy user
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
+        // Sai mật khẩu
         if (!password_verify($password, $user['password'])) {
-            echo "<script>alert('Mật khẩu không đúng!'); window.history.back();</script>";
-            exit();
+            // echo '<script>alert("ikhsdfoihasopdifh")</script>';
+            header("Location: ../views/index.php?error=1&error_type=incorrect-password&action=login");
+            exit;
         }
 
-        if ((int)$user['is_active'] === 0) {
-            echo "<script>alert('Tài khoản chưa kích hoạt. Vui lòng kiểm tra email.'); window.history.back();</script>";
-            exit();
+        // Tài khoản chưa kích hoạt
+        if ((int) $user['is_active'] === 0) {
+            header("Location: ../views/index.php?error=1&error_type=not-strong-pwd&action=login");
+            exit;
         }
 
+        // Đăng nhập thành công
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
 
-        echo "<script>alert('Đăng nhập thành công!'); window.location.href = 'index.php';</script>";
-        exit();
+        header("Location: ../views/index.php?success=1&action=login");
+        exit;
     } else {
-        echo "<script>alert('Email không tồn tại!'); window.history.back();</script>";
-        exit();
+        // Không tìm thấy user
+        header("Location: ../views/index.php?error=1&error_type=account-not-found&action=login");
+        exit;
     }
 
     $stmt->close();
