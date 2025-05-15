@@ -84,3 +84,58 @@ if (!$result) {
 
 <?php include_once '../../includes/modal-insert-chapter.php'; ?>
 <?php include_once '../../includes/modal-update-chapter.php'; ?>
+<?php include_once '../../includes/modal-alert.php'; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php
+$action = $_GET['action'] ?? '';
+$success = $_GET['success'] ?? '';
+$error = $_GET['error'] ?? '';
+
+$messages = [
+  'insert' => [
+    'success' => ['icon' => 'success', 'title' => 'Thành công!', 'text' => 'Chương đã được thêm.'],
+    'error' => ['icon' => 'error', 'title' => 'Thất bại!', 'text' => 'Không thể thêm Chương. Vui lòng thử lại.']
+  ],
+  'update' => [
+    'success' => ['icon' => 'success', 'title' => 'Thành công!', 'text' => 'Chương đã được cập nhật.'],
+    'error' => ['icon' => 'error', 'title' => 'Thất bại!', 'text' => 'Không thể cập nhật Chương. Vui lòng thử lại.']
+  ],
+  'delete' => [
+    'success' => ['icon' => 'success', 'title' => 'Thành công!', 'text' => 'Chương đã được xóa.'],
+    'error' => ['icon' => 'error', 'title' => 'Thất bại!', 'text' => 'Không thể xóa Chương. Vui lòng thử lại.']
+  ]
+];
+
+if (isset($messages[$action])) {
+  if ($success === '1') {
+    $msg = $messages[$action]['success'];
+  } elseif ($error === '1') {
+    $msg = $messages[$action]['error'];
+  }
+
+  if (isset($msg)) {
+    echo "<script>
+      Swal.fire({
+        icon: '{$msg['icon']}',
+        title: '{$msg['title']}',
+        text: '{$msg['text']}',
+        timer: 2000,
+        showConfirmButton: true
+      });
+    </script>";
+  }
+}
+?>
+
+<!-- Xóa các query sau khi hiển thị alert -->
+<script>
+  if (window.history.replaceState) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('success');
+    url.searchParams.delete('error');
+    url.searchParams.delete('action');
+    window.history.replaceState({}, document.title, url.pathname);
+  }
+</script>

@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->close();
 
     $conn->close();
-    header("Location: ../views/dashboard/index.php?type=chapter-management");
+    header("Location: ../views/dashboard/index.php?type=chapter-management&success=1&action=insert"); 
     exit();
   }
 }

@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->bind_param("ssiiis", $title, $video_url, $duration, $order, $id, $chapter_id);
 
   if ($stmt->execute()) {
-    header("Location: ../views/dashboard/index.php?type=lesson-management"); // Chuyển hướng về trang quản lý bài học
+    header("Location: ../views/dashboard/index.php?type=lesson-management&success=1&action=update"); 
     exit();
   } else {
     die("Cập nhật thất bại: " . $stmt->error);

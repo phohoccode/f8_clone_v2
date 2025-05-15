@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->bind_param("sis", $chapter_title, $order, $id);
 
   if ($stmt->execute()) {
-    header("Location: ../views/dashboard/index.php?type=chapter-management"); // Chuyển hướng về trang quản lý chương học
+    header("Location: ../views/dashboard/index.php?type=chapter-management&success=1&action=update"); 
     exit();
   } else {
     die("Cập nhật thất bại: " . $stmt->error);

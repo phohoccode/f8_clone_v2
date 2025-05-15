@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Thực thi câu lệnh
   if ($stmt->execute()) {
-    header("Location: ../views/dashboard/index.php?type=lesson-management"); // Chuyển hướng về trang quản lý bài học
+    header("Location: ../views/dashboard/index.php?type=lesson-management&success=1&action=insert"); 
     exit();
   } else {
     die("Thêm bài học thất bại: " . $stmt->error);

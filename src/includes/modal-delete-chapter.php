@@ -33,7 +33,7 @@ if (isset($_POST['id'])) {
     $conn->commit();
 
     // Chuyển hướng về trang quản lý chương học sau khi xóa thành công
-    header("Location: ../views/dashboard/index.php?type=chapter-management");
+    header("Location: ../views/dashboard/index.php?type=chapter-management&success=1&action=delete"); 
     exit();
   } catch (Exception $e) {
     // Rollback transaction nếu có lỗi
