@@ -20,14 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $objectives = $_POST['objectives'];
   $slug = $_POST['slug'];
   $thumbnail_url = $_POST['thumbnail_url'];
-  $price = $_POST['price'];
 
-  $sql = "UPDATE courses SET title = ?, description = ?, objectives = ?, slug = ?, thumbnail_url = ?, price = ? WHERE id = ?";
+  $sql = "UPDATE courses SET title = ?, description = ?, objectives = ?, slug = ?, thumbnail_url = ? WHERE id = ?";
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("ssssssi", $title, $description, $objectives, $slug, $thumbnail_url, $price, $id);
+  $stmt->bind_param("ssssss", $title, $description, $objectives, $slug, $thumbnail_url, $id);
 
   if ($stmt->execute()) {
-    header("Location: ../views/dashboard/index.php"); 
+    header("Location: ../views/dashboard/index.php");
     exit();
   } else {
     echo "Cập nhật thất bại.";
@@ -37,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <div id="modal-update-course"
-  class="hidden overflow-y-auto fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-  <div class="bg-white w-full max-w-md p-6 rounded shadow-lg relative max-h-[80vh] overflow-y-auto">
+  class="hidden overflow-y-auto flex items-center justify-center z-50 fixed inset-0 min-h-full w-full">
+  <div onclick="closeUpdateModal()" class="absolute inset-0 bg-black bg-opacity-40 z-[7]"></div>
+  <div class="bg-white relative modal-body scale-95 transition-all duration-300 w-full max-w-md p-6 rounded shadow-lg z-10 max-h-[80vh] overflow-y-auto">
     <h2 class="text-xl font-bold mb-4">Cập nhật Khóa Học</h2>
     <form action="../../includes/modal-update-course.php" method="POST" class="space-y-4">
       <input type="hidden" name="id" id="update-course-id">
@@ -66,11 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="thumbnail_url" id="update-thumbnail_url" required
           class="w-full border px-3 py-2 rounded">
       </div>
-      <div>
-        <label class="block font-medium mb-1">Giá</label>
-        <input type="text" name="price" id="update-price" required class="w-full border px-3 py-2 rounded">
-      </div>
-
       <div class="flex justify-end gap-2">
         <button type="button" onclick="closeUpdateModal()"
           class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Hủy</button>

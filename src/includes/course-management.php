@@ -10,8 +10,7 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
 <main class="flex-1 p-6 min-h-screen overflow-y-auto">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-2xl font-semibold">Danh sách khóa học</h1>
-    <button onclick="document.getElementById('modal-insert-course').classList.remove('hidden')"
-      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+    <button onclick="openInsertModal()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
       <i class="fas fa-plus"></i> Thêm khóa học
     </button>
   </div>
@@ -26,7 +25,6 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
           <th class="border px-4 py-2">Mục tiêu</th>
           <th class="border px-4 py-2">Slug</th>
           <th class="border px-4 py-2">Ảnh khóa học</th>
-          <th class="border px-4 py-2">Giá</th>
           <th class="border px-4 py-2">Hành động</th>
         </tr>
       </thead>
@@ -39,7 +37,6 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
             <td class="border px-4 py-2"><?= $row['objectives'] ?></td>
             <td class="border px-4 py-2"><?= $row['slug'] ?></td>
             <td class="border px-4 py-2"><?= $row['thumbnail_url'] ?></td>
-            <td class="border px-4 py-2"><?= $row['price'] ?></td>
             <td class="border px-4 py-2">
               <?php
               $id = $row['id'];
@@ -48,7 +45,6 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
               $objectives = json_encode($row['objectives']);
               $slug = json_encode($row['slug']);
               $thumbnail_url = json_encode($row['thumbnail_url']);
-              $price = json_encode($row['price']);
               ?>
               <button onclick='openUpdateModal(
             "<?= $id ?>",
@@ -56,14 +52,13 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
             <?= $description ?>,
             <?= $objectives ?>,
             <?= $slug ?>,
-            <?= $thumbnail_url ?>,
-            <?= $price ?>
+            <?= $thumbnail_url ?>
           )' class="text-yellow-500 mr-2">
                 <i class="fas fa-edit"></i>
               </button>
 
-              <a href="/f8_clone/src/includes/delete-course.php?id=<?= $id ?>" class="text-red-600"
-                onclick="return confirm('Xóa khóa học này?')"><i class="fas fa-trash"></i></a>
+              <button class="text-red-600" onclick='openModalAlert("<?= $id ?>")'>
+                <i class="fas fa-trash"></i></button>
             </td>
 
           </tr>
@@ -76,3 +71,4 @@ $result = $conn->query("SELECT * FROM courses ORDER BY created_at DESC");
 <!-- Modal Thêm Khóa Học -->
 <?php include_once '../../includes/modal-insert-course.php'; ?>
 <?php include_once '../../includes/modal-update-course.php'; ?>
+<?php include_once '../../includes/modal-alert.php'; ?>

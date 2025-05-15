@@ -22,7 +22,7 @@ if (empty($slug)) {
 }
 
 // Truy vấn SQL để lấy toàn bộ thông tin khóa học
-$course_query = "SELECT id, title, slug, objectives, description, price, thumbnail_url 
+$course_query = "SELECT id, title, slug, objectives, description, thumbnail_url 
                 FROM courses 
                 WHERE slug = ?";
 
