@@ -15,12 +15,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['name'])) {
         $newName = trim($_POST["name"]);
         if (empty($newName)) {
-            header("Location: ../views/setting.php?error=Tên không được để trống");
+            header("Location: ../views/setting.php?error=1&action=update-username");
             exit;
         }
         $stmt = $conn->prepare("UPDATE users SET name = ? WHERE id = ?");
         $stmt->bind_param("si", $newName, $userId);
         $stmt->execute();
+        // === Redirect cuối cùng sau tất cả thao tác ===
+        header("Location: ../views/setting.php?success=1&action=update-username");
+        exit;
     }
 
     // === Cập nhật bio ===
@@ -29,6 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt = $conn->prepare("UPDATE users SET bio = ? WHERE id = ?");
         $stmt->bind_param("si", $newBio, $userId);
         $stmt->execute();
+          header("Location: ../views/setting.php?success=1&action=update-bio");
+        exit;
     }
 
     // === Cập nhật avatar ===
@@ -37,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
         if (!in_array($file['type'], $allowedTypes)) {
-            header("Location: ../views/setting.php?error=Chỉ cho phép ảnh JPG, PNG hoặc GIF");
+            header("Location: ../views/setting.php?error=1&error_type=wrong-format&action=update-avatar");
             exit;
         }
 
@@ -57,35 +62,67 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute();
 
         $_SESSION['user_picture'] = $avatarUrl;
+          header("Location: ../views/setting.php?success=1&action=update-avatar");
+        exit;
     }
 
     // === Cập nhật mật khẩu ===
-    if (isset($_POST['new_password']) && isset($_POST['confirm_password'])) {
+    if (
+        isset($_POST['current_password']) &&
+        isset($_POST['new_password']) &&
+        isset($_POST['confirm_password'])
+    ) {
+        $current_password = $_POST['current_password'];
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
 
-        if (empty($new_password) || empty($confirm_password)) {
-            header("Location: ../views/setting.php?error=Mật khẩu không được để trống");
+        // Lấy mật khẩu hiện tại từ DB
+        $stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->bind_result($current_hashed_password);
+        $stmt->fetch();
+        $stmt->close();
+
+        // Kiểm tra mật khẩu hiện tại
+        if (!password_verify($current_password, $current_hashed_password)) {
+            header("Location: ../views/setting.php?error=1&error_type=incorrect-password&action=update-password");
             exit;
         }
+        //Kiểm tra độ mạnh
+        if (
+            strlen($new_password) < 8 ||
+            !preg_match('/[A-Z]/', $new_password) ||
+            !preg_match('/[a-z]/', $new_password) ||
+            !preg_match('/[0-9]/', $new_password) ||
+            !preg_match('/[\W]/', $new_password)
+        ) {
+            header("Location: ../views/setting.php?error=1&error_type=not-strong-pwd&action=update-password");
+            exit;
+        }
+
 
         if ($new_password !== $confirm_password) {
-            header("Location: ../views/setting.php?error=Mật khẩu không khớp");
+            header("Location: ../views/setting.php?error=1&error_type=mismatch&action=update-password");
             exit;
         }
 
+        // Cập nhật mật khẩu mới
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
         $stmt->bind_param("si", $hashed_password, $userId);
 
         if (!$stmt->execute()) {
-            header("Location: ../views/setting.php?error=Lỗi khi cập nhật mật khẩu");
+            header("Location: ../views/setting.php?error=1&error_type=default&action=update-password");
             exit;
         }
+
+            // === Redirect cuối cùng sau tất cả thao tác ===
+    header("Location: ../views/setting.php?success=1&action=update-password");
+    exit;
     }
 
-    // === Redirect cuối cùng sau tất cả thao tác ===
-    header("Location: ../views/setting.php?success=Cập nhật thành công");
-    exit;
+
+
 }
 ?>

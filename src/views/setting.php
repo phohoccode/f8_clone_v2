@@ -22,7 +22,7 @@ if (!$stmt) {
     die("Lỗi prepare: " . $conn->error);
 }
 
-$stmt->bind_param("i", $userId);
+$stmt->bind_param("s", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
@@ -39,11 +39,11 @@ $user = $result->fetch_assoc();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-r from-pink-50 to-blue-50 min-h-screen flex items-center justify-center">
+<body id="setting-modal" class="bg-gradient-to-r from-pink-50 to-blue-50 min-h-screen flex items-center justify-center">
     <!-- Nút đóng -->
-    <button onclick="window.history.back()" class="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-2xl">
+    <a href="./index.php" class="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-2xl">
         <i class="fa-solid fa-xmark"></i>
-    </button>
+    </a>
 
     <div class="w-full max-w-5xl bg-white shadow-xl rounded-xl flex overflow-hidden">
 
@@ -153,9 +153,152 @@ $user = $result->fetch_assoc();
         </div>
     </div>
     <?php include_once '../includes/setting-modal.php'; ?>
-   
+
 
 
 </body>
 <script src="/f8_clone/src/assets/js/setting-modal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php
+$action = $_GET['action'] ?? '';
+$success = $_GET['success'] ?? '';
+$error = $_GET['error'] ?? '';
+$error_type = $_GET['error_type'] ?? 'default';  // thêm khai báo error_type với default
+$succes_type = $_GET['succes_type'] ?? 'default';
+
+$messages = [
+    'update-password' => [
+        'success' => [
+            'default' => [
+                'icon' => 'success',
+                'title' => 'Thành công!',
+                'text' => 'Mật khẩu đã được cập nhật thành công.'
+            ]
+        ],
+        'error' => [
+            'incorrect-password' => [
+                'icon' => 'error',
+                'title' => 'Sai mật khẩu!',
+                'text' => 'Mật khẩu cũ không đúng.'
+            ],
+              'not-strong-pwd' => [
+                'icon' => 'error',
+                'title' => 'Không khớp!',
+                'text' => 'Mật khẩu không đủ mạnh.'
+            ],
+            'mismatch' => [
+                'icon' => 'error',
+                'title' => 'Không khớp!',
+                'text' => 'Mật khẩu xác nhận không trùng khớp.'
+            ],
+            'default' => [
+                'icon' => 'error',
+                'title' => 'Thất bại!',
+                'text' => 'Không thể cập nhật mật khẩu. Vui lòng thử lại.'
+            ]
+        ]
+    ],
+    'update-username' => [
+        'success' => [
+            'default' => [
+                'icon' => 'success',
+                'title' => 'Thành công!',
+                'text' => 'Cập nhật thành công.'
+            ]
+        ],
+        'error' => [
+            'default' => [
+                'icon' => 'error',
+                'title' => 'Thất bại!',
+                'text' => 'Cập nhật thông tin thất bại. Vui lòng thử lại.'
+            ]
+        ]
+    ],
+    'update-bio' => [
+        'success' => [
+            'default' => [
+                'icon' => 'success',
+                'title' => 'Thành công!',
+                'text' => 'Cập nhật thành công.'
+            ]
+        ],
+        'error' => [
+            'default' => [
+                'icon' => 'error',
+                'title' => 'Thất bại!',
+                'text' => 'Cập nhật thông tin thất bại. Vui lòng thử lại.'
+            ]
+        ]
+    ],
+    'update-avatar' => [
+        'success' => [
+            'default' => [
+                'icon' => 'success',
+                'title' => 'Thành công!',
+                'text' => 'Cập nhật thành công.'
+            ]
+        ],
+        'error' => [
+            'default' => [
+                'icon' => 'error',
+                'title' => 'Thất bại!',
+                'text' => 'Cập nhật thông tin thất bại. Vui lòng thử lại.'
+            ],
+            'wrong-format' => [
+                'icon' => 'error',
+                'title' => 'Thất bại!',
+                'text' => 'Ảnh không đúng định dạng. Vui lòng chọn ảnh khác.'
+            ]
+        ]
+    ],
+];
+
+
+if (isset($messages[$action])) {
+    if ($success === '1') {
+        $msg = $messages[$action]['success'];
+        if (is_array($messages[$action]['success'])) {
+            // Lấy lỗi theo error_type, nếu không tồn tại thì lấy default
+            $msg = $messages[$action]['success'][$error_type] ?? $messages[$action]['success']['default'];
+        } else {
+            // Nếu chỉ là 1 lỗi chung (không phải mảng)
+            $msg = $messages[$action]['success'];
+        }
+    } elseif ($error === '1') {
+        // Kiểm tra xem error có phải là mảng (nhiều loại) hay không
+        if (is_array($messages[$action]['error'])) {
+            // Lấy lỗi theo error_type, nếu không tồn tại thì lấy default
+            $msg = $messages[$action]['error'][$error_type] ?? $messages[$action]['error']['default'];
+        } else {
+            // Nếu chỉ là 1 lỗi chung (không phải mảng)
+            $msg = $messages[$action]['error'];
+        }
+    }
+
+    if (isset($msg)) {
+        echo "<script>
+      Swal.fire({
+        icon: '{$msg['icon']}',
+        title: '{$msg['title']}',
+        text: '{$msg['text']}',
+        timer: 2000,
+        showConfirmButton: true
+      });
+    </script>";
+    }
+}
+?>
+<!-- Xóa các query sau khi hiển thị alert -->
+<script>
+    if (window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('success');
+        url.searchParams.delete('error');
+        url.searchParams.delete('action');
+        url.searchParams.delete('error_type');  // xóa luôn error_type cho sạch
+        window.history.replaceState({}, document.title, url.pathname);
+    }
+</script>
+
 </html>

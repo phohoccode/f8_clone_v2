@@ -1,3 +1,20 @@
+//setting-modal
+function closeModal() {
+    document.getElementById('setting-modal').classList.add('hidden');
+}
+
+// function goBackToBeforeSettings() {
+//     const entryLength = parseInt(sessionStorage.getItem('settingsEntryLength') || '0', 10);
+//     const stepsToGoBack = history.length - entryLength;
+
+//     if (stepsToGoBack > 0) {
+//         history.go(-stepsToGoBack);
+//     } else {
+//         // Nếu không có dữ liệu thì fallback về trang chủ hoặc trang mặc định
+//         window.location.href = '/';
+//     }
+// }
+
 //Modal name
 function openModal() {
     document.getElementById('nameModal').classList.remove('hidden');

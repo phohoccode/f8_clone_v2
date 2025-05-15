@@ -31,7 +31,8 @@ $authUrl = $client->createAuthUrl();
                 <input type="password" name="password" placeholder="Mật khẩu"
                     class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required />
             </div>
-            <button type="submit" id="loginSubmitBtn" class="w-full p-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600">
+            <button type="submit" id="loginSubmitBtn"
+                class="w-full p-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-600">
                 Đăng nhập
             </button>
         </form>
@@ -41,7 +42,8 @@ $authUrl = $client->createAuthUrl();
             <span class="text-gray-700">Đăng nhập với Google</span>
         </button>
         <p class="text-center mt-4 text-sm">
-            Bạn chưa có tài khoản? <a href="#" id="switchToRegister" class="text-orange-500 hover:underline">Đăng ký</a><br>
+            Bạn chưa có tài khoản? <a href="#" id="switchToRegister" class="text-orange-500 hover:underline">Đăng
+                ký</a><br>
             <a href="#" class="text-orange-500 hover:underline">Quên mật khẩu?</a>
         </p>
         <button id="closeLoginModalBtn" class="mt-4 w-full text-gray-500 hover:text-black text-sm">
@@ -57,27 +59,33 @@ $authUrl = $client->createAuthUrl();
         <form id="registerForm" method="POST" action="register.php" class="space-y-4">
             <div class="mb-4">
                 <label class="text-gray-700">Nhập vào tên</label>
-                <input type="text" id="registerName" name="name" placeholder="Tên của bạn" class="w-full p-2 border rounded" required>
+                <input type="text" id="registerName" name="name" placeholder="Tên của bạn"
+                    class="w-full p-2 border rounded" required>
             </div>
             <div class="mb-4">
                 <label class="text-gray-700">Nhập vào Email</label>
-                <input type="email" id="registerEmail" name="email" placeholder="Email của bạn" class="w-full p-2 border rounded" required>
+                <input type="email" id="registerEmail" name="email" placeholder="Email của bạn"
+                    class="w-full p-2 border rounded" required>
             </div>
             <div class="mb-4">
                 <label class="text-gray-700">Nhập vào mật khẩu</label>
-                <input type="password" id="registerPassword" name="password" placeholder="Mật khẩu" class="w-full p-2 border rounded" required>
+                <input type="password" id="registerPassword" name="password" placeholder="Mật khẩu"
+                    class="w-full p-2 border rounded" required>
             </div>
             <div class="mb-4">
                 <label class="text-gray-700">Xác nhận mật khẩu</label>
-                <input type="password" id="confirmPassword" name="confirm_password" placeholder="Xác nhận mật khẩu" class="w-full p-2 border rounded" required>
+                <input type="password" id="confirmPassword" name="confirm_password" placeholder="Xác nhận mật khẩu"
+                    class="w-full p-2 border rounded" required>
             </div>
             <div class="mb-4">
                 <div class="g-recaptcha" data-sitekey="6LdKLC0rAAAAAKkkeXbd3GjDLeyly6SeQ80WK9WU"></div>
             </div>
-            <button type="submit" id="submitRegisterBtn" class="w-full bg-blue-500 text-white py-2 rounded-3xl hover:bg-blue-600">Đăng ký</button>
+            <button type="submit" id="submitRegisterBtn"
+                class="w-full bg-blue-500 text-white py-2 rounded-3xl hover:bg-blue-600">Đăng ký</button>
         </form>
         <p class="text-center mt-4 text-sm">
-            Bạn đã có tài khoản? <a href="#" id="switchToLogin" class="text-orange-500 hover:underline">Đăng nhập</a><br>
+            Bạn đã có tài khoản? <a href="#" id="switchToLogin" class="text-orange-500 hover:underline">Đăng
+                nhập</a><br>
             <a href="#" class="text-orange-500 hover:underline">Quên mật khẩu?</a>
         </p>
         <button id="closeRegisterModalBtn" class="mt-4 w-full text-gray-500 hover:text-black text-sm">Đóng</button>
