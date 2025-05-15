@@ -20,7 +20,7 @@ $stmt->execute();
 $stmt->close();
 $conn->close();
 
-header("Location: ../views/dashboard/index.php");
+header("Location: ../views/dashboard/index.php?success=1&action=delete");
 
 exit;
 ?>

@@ -14,31 +14,46 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $id = $_POST['id'];
+  $id = $_POST['id']; // ép kiểu int cho id
   $title = $_POST['title'];
   $description = $_POST['description'];
   $objectives = $_POST['objectives'];
   $slug = $_POST['slug'];
   $thumbnail_url = $_POST['thumbnail_url'];
 
-  $sql = "UPDATE courses SET title = ?, description = ?, objectives = ?, slug = ?, thumbnail_url = ? WHERE id = ?";
-  $stmt = $conn->prepare($sql);
-  $stmt->bind_param("ssssss", $title, $description, $objectives, $slug, $thumbnail_url, $id);
+  // Kiểm tra trùng slug với các khóa học khác
+  $checkSql = "SELECT id FROM courses WHERE slug = ? AND id != ?";
+  $checkStmt = $conn->prepare($checkSql);
+  $checkStmt->bind_param("ss", $slug, $id);
+  $checkStmt->execute();
+  $checkStmt->store_result();
 
-  if ($stmt->execute()) {
-    header("Location: ../views/dashboard/index.php");
+  if ($checkStmt->num_rows > 0) {
+    header("Location: ../views/dashboard/index.php?error=1&action=update");
     exit();
   } else {
-    echo "Cập nhật thất bại.";
+    // Không trùng, thực hiện cập nhật
+    $sql = "UPDATE courses SET title = ?, description = ?, objectives = ?, slug = ?, thumbnail_url = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssi", $title, $description, $objectives, $slug, $thumbnail_url, $id);
+
+    if ($stmt->execute()) {
+      header("Location: ../views/dashboard/index.php?success=1&action=update");
+      exit();
+    } else {
+      header("Location: ../views/dashboard/index.php?error=1&action=update");
+      exit();
+    }
   }
 }
 ?>
 
-
+<!-- Form modal giữ nguyên như bạn gửi -->
 <div id="modal-update-course"
   class="hidden overflow-y-auto flex items-center justify-center z-50 fixed inset-0 min-h-full w-full">
   <div onclick="closeUpdateModal()" class="absolute inset-0 bg-black bg-opacity-40 z-[7]"></div>
-  <div class="bg-white relative modal-body scale-95 transition-all duration-300 w-full max-w-md p-6 rounded shadow-lg z-10 max-h-[80vh] overflow-y-auto">
+  <div
+    class="bg-white relative modal-body scale-95 transition-all duration-300 w-full max-w-md p-6 rounded shadow-lg z-10 max-h-[80vh] overflow-y-auto">
     <h2 class="text-xl font-bold mb-4">Cập nhật Khóa Học</h2>
     <form action="../../includes/modal-update-course.php" method="POST" class="space-y-4">
       <input type="hidden" name="id" id="update-course-id">
